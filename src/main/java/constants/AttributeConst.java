@@ -1,5 +1,8 @@
 package constants;
-
+/**
+ * 画面の項目値等を定義するEnumクラス
+ *
+ */
 public enum AttributeConst {
 
   //フラッシュメッセージ
