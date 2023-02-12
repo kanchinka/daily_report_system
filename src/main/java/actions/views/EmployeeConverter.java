@@ -13,7 +13,7 @@ import models.Employee;
  */
 public class EmployeeConverter {
     /**
-     * ViewモデルのインスタンスからDTOモデルのインスタンスを作成する
+     * ViewモデルのインスタンスからDTOモデルのインスタンスを作成する（newする）
      * @param ev EmployeeViewのインスタンス
      * @return Employeeのインスタンス
      */
