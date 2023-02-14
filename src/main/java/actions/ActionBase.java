@@ -203,7 +203,7 @@ public abstract class ActionBase {
         request.setAttribute(key.getValue(), value);
     }
 
-    /**
+    /**　
      * セッションスコープから指定されたパラメータの値を取得し、返却する
      * @param key パラメータ名
      * @return パラメータの値
