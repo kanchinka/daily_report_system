@@ -1,6 +1,5 @@
 package models;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -9,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,23 +20,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 日報データのDTOモデル
+ * リアクションデータのDTOモデル
  *
  */
-@Table(name = JpaConst.TABLE_REP)
+@Table(name = JpaConst.TABLE_REA)
 @NamedQueries({
     @NamedQuery(
-            name = JpaConst.Q_REP_GET_ALL,
-            query = JpaConst.Q_REP_GET_ALL_DEF),
-    @NamedQuery(
-            name = JpaConst.Q_REP_COUNT,
-            query = JpaConst.Q_REP_COUNT_DEF),
-    @NamedQuery(
-            name = JpaConst.Q_REP_GET_ALL_MINE,
-            query = JpaConst.Q_REP_GET_ALL_MINE_DEF),
-    @NamedQuery(
-            name = JpaConst.Q_REP_COUNT_ALL_MINE,
-            query = JpaConst.Q_REP_COUNT_ALL_MINE_DEF)
+            name = JpaConst.Q_REA_GOOD_COUNT_ALL_MINE,
+            query = JpaConst.Q_REA_GOOD_COUNT_ALL_MINE_DEF),
 })
 
 @Getter //全てのクラスフィールドについてgetterを自動生成する(Lombok)
@@ -46,13 +35,13 @@ import lombok.Setter;
 @NoArgsConstructor //引数なしコンストラクタを自動生成する(Lombok)
 @AllArgsConstructor //全てのクラスフィールドを引数にもつ引数ありコンストラクタを自動生成する(Lombok)
 @Entity
-public class Report {
+public class Reaction {
 
     /**
      * id
      */
     @Id
-    @Column(name = JpaConst.REP_COL_ID)
+    @Column(name = JpaConst.REA_COL_ID)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -60,38 +49,20 @@ public class Report {
      * リアクションした従業員
      */
     @ManyToOne
-    @JoinColumn(name = JpaConst.REP_COL_EMP, nullable = false)
+    @JoinColumn(name = JpaConst.REA_COL_EMP, nullable = false)
     private Employee employee;
 
     /**
      * リアクションした日報
      */
-    @Column(name = JpaConst.REA_COL_REP, nullable = false)
-    private LocalDate reportDate;
+    @ManyToOne
+    @JoinColumn(name = JpaConst.REA_COL_REP, nullable = false)
+    private Report report;
 
     /**
-     * 日報のタイトル
+     * いいね登録日時
      */
-    @Column(name = JpaConst.REP_COL_TITLE, length = 255, nullable = false)
-    private String title;
-
-    /**
-     * 日報の内容
-     */
-    @Lob
-    @Column(name = JpaConst.REP_COL_CONTENT, nullable = false)
-    private String content;
-
-    /**
-     * 登録日時
-     */
-    @Column(name = JpaConst.REP_COL_CREATED_AT, nullable = false)
+    @Column(name = JpaConst.REA_GOOD_COL_CREATED_AT, nullable = false)
     private LocalDateTime createdAt;
-
-    /**
-     * 更新日時
-     */
-    @Column(name = JpaConst.REP_COL_UPDATED_AT, nullable = false)
-    private LocalDateTime updatedAt;
 
 }
