@@ -46,6 +46,7 @@ public interface JpaConst {
     String REA_COL_EMP = "employee_id"; //リアクションした従業員のid
     String REA_COL_REP = "report_id"; //リアクションした日報のid
     String REA_GOOD_COL_CREATED_AT = "good_at"; //リアクションをした日時
+    String REA_COL_GOOD_FLAG = "good_flag"; //いいねフラグ
     int REA＿GOOD_TRUE = 1; //いいねON(反応した)
     int REA＿GOOD_FALSE = 0; //いいねOFF(反応してない)
 
@@ -88,5 +89,9 @@ public interface JpaConst {
 
     //指定した日報のいいねの件数を取得する
     String Q_REA_GOOD_COUNT_ALL_MINE = ENTITY_REA + ".countAllGood";
-    String Q_REA_GOOD_COUNT_ALL_MINE_DEF = "SELECT COUNT(rea) FROM Good AS rea WHERE rea.report = :" + JPQL_PARM_REPORT;
+    String Q_REA_GOOD_COUNT_ALL_MINE_DEF = "SELECT COUNT(rea) FROM Reaction AS rea WHERE rea.report = :" + JPQL_PARM_REPORT;
+
+    //指定した従業員IDと日報IDを持つリアクションデータを取得する
+    String Q_REA_GET_MINE = ENTITY_REA + ".getMine";
+    String Q_REA_GET_MINE_DEF = "SELECT rea FROM Reaction AS rea WHERE rea.employee = :" + JPQL_PARM_EMPLOYEE + " AND rea.report = :" + JPQL_PARM_REPORT;
 }

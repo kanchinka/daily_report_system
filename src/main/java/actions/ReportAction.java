@@ -7,11 +7,14 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
+import actions.views.ReactionConverter;
+import actions.views.ReactionView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.ReactionService;
 import services.ReportService;
 
 /**
@@ -21,6 +24,7 @@ import services.ReportService;
 public class ReportAction extends ActionBase {
 
     private ReportService service;
+    private ReactionService rservice;
 
     /**
      * メソッドを実行する
@@ -29,10 +33,12 @@ public class ReportAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new ReportService();
+        rservice = new ReactionService();
 
         //メソッドを実行
         invoke();
         service.close();
+        rservice.close();
     }
 
     /**
@@ -48,6 +54,15 @@ public class ReportAction extends ActionBase {
 
         //全日報データの件数を取得
         long reportsCount = service.countAll();
+
+        //表示する日報データのいいね件数を取得しリスト化
+        int size = reports.size();
+        for(int i = 0; i < size; i++)
+        {
+            ReportView rv = reports.get(i);
+            long reactionsCount = rservice.countGood(rv);
+            rv.setGoodCount(reactionsCount);
+        }
 
         putRequestScope(AttributeConst.REPORTS, reports); //取得した日報データ
         putRequestScope(AttributeConst.REP_COUNT, reportsCount); //全ての日報データの件数
@@ -113,7 +128,9 @@ public class ReportAction extends ActionBase {
                     getRequestParam(AttributeConst.REP_TITLE),
                     getRequestParam(AttributeConst.REP_CONTENT),
                     null,
+                    null,
                     null);
+            System.out.println(rv);
 
             //日報情報登録
             List<String> errors = service.create(rv);
@@ -146,8 +163,19 @@ public class ReportAction extends ActionBase {
      */
     public void show() throws ServletException, IOException {
 
+
+
         //idを条件に日報データを取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+        System.out.println(rv);
+        //日報データのいいね数
+        long reactionsCount = rservice.countGood(rv);
+
+        //セッションからログイン中の従業員idを取得
+        EmployeeView loginEmployee = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //指定した従業員IDと日報IDを持つリアクションデータを取得する
+        ReactionView rea = ReactionConverter.toView(rservice.getByIds(rv, loginEmployee));
 
         if (rv == null) {
             //該当の日報データが存在しない場合はエラー画面を表示
@@ -155,7 +183,10 @@ public class ReportAction extends ActionBase {
 
         } else {
 
+            putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
             putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
+            putRequestScope(AttributeConst.REA_COUNT, reactionsCount);//日報データのいいね数
+            putRequestScope(AttributeConst.REACTION, rea);//日報データのいいね数
 
             //詳細画面を表示
             forward(ForwardConst.FW_REP_SHOW);

@@ -2,10 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="constants.ForwardConst" %>
+<%@ page import="constants.AttributeConst" %>
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
+<c:set var="actRea" value="${ForwardConst.ACT_REA.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="commGood" value="${ForwardConst.CMD_GOOD.getValue()}" />
+<c:set var="commDes" value="${ForwardConst.CMD_DESTROY.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -26,6 +30,25 @@
                 <tr>
                     <th>内容</th>
                     <td><pre><c:out value="${report.content}" /></pre></td>
+                </tr>
+                <tr>
+                    <th>反応</th>
+                    <td>
+                     <c:if test="${reaction == null}">
+                  <form method="POST" action="<c:url value='?action=${actRea}&command=${commGood}' />">
+                      <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                      <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
+                    <button type="submit">いいね</button>
+                  </form>
+                     </c:if>
+                　　  <c:if test="${reaction != null}">
+                    <form method="POST" action="<c:url value='?action=${actRea}&command=${commDes}' />">
+                          <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                          <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
+                    <button type="submit">いいね</button>
+                  </form>
+                     </c:if>
+                    （全 ${reaction_count} 件)</td>
                 </tr>
                 <tr>
                     <th>登録日時</th>

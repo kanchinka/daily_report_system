@@ -10,6 +10,7 @@ import actions.views.ReportView; //追記
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;  //追記
+import services.ReactionService;
 import services.ReportService;  //追記
 
 /**
@@ -19,6 +20,7 @@ import services.ReportService;  //追記
 public class TopAction extends ActionBase {
 
     private ReportService service; //追記
+    private ReactionService rservice;
 
     /**
      * indexメソッドを実行する
@@ -27,11 +29,13 @@ public class TopAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new ReportService(); //追記
+        rservice = new ReactionService();
 
         //メソッドを実行
         invoke();
 
         service.close(); //追記
+        rservice.close();
 
     }
 
@@ -51,6 +55,15 @@ public class TopAction extends ActionBase {
 
         //ログイン中の従業員が作成した日報データの件数を取得
         long myReportsCount = service.countAllMine(loginEmployee);
+
+        //表示する日報データのいいね件数を取得しリスト化
+        int size = reports.size();
+        for(int i = 0; i < size; i++)
+        {
+            ReportView rv = reports.get(i);
+            long reactionsCount = rservice.countGood(rv);
+            rv.setGoodCount(reactionsCount);
+        }
 
         putRequestScope(AttributeConst.REPORTS, reports); //取得した日報データ
         putRequestScope(AttributeConst.REP_COUNT, myReportsCount); //ログイン中の従業員が作成した日報の数

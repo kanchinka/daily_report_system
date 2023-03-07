@@ -57,16 +57,16 @@ public class Report {
     private Integer id;
 
     /**
-     * リアクションした従業員
+     * 日報を登録した従業員
      */
     @ManyToOne
     @JoinColumn(name = JpaConst.REP_COL_EMP, nullable = false)
     private Employee employee;
 
     /**
-     * リアクションした日報
+     * いつの日報かを示す日付
      */
-    @Column(name = JpaConst.REA_COL_REP, nullable = false)
+    @Column(name = JpaConst.REP_COL_REP_DATE, nullable = false)
     private LocalDate reportDate;
 
     /**

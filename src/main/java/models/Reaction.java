@@ -28,6 +28,9 @@ import lombok.Setter;
     @NamedQuery(
             name = JpaConst.Q_REA_GOOD_COUNT_ALL_MINE,
             query = JpaConst.Q_REA_GOOD_COUNT_ALL_MINE_DEF),
+    @NamedQuery(
+            name = JpaConst.Q_REA_GET_MINE,
+            query = JpaConst.Q_REA_GET_MINE_DEF)
 })
 
 @Getter //全てのクラスフィールドについてgetterを自動生成する(Lombok)
@@ -64,5 +67,6 @@ public class Reaction {
      */
     @Column(name = JpaConst.REA_GOOD_COL_CREATED_AT, nullable = false)
     private LocalDateTime createdAt;
+
 
 }

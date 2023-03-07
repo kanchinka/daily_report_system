@@ -40,6 +40,7 @@ public class ReactionConverter {
                 EmployeeConverter.toView(rea.getEmployee()),
                 ReportConverter.toView(rea.getReport()),
                 rea.getCreatedAt());
+
     }
 
     /**
@@ -62,12 +63,11 @@ public class ReactionConverter {
      * @param r DTOモデル(コピー先)
      * @param rv Viewモデル(コピー元)
      */
-    public static void copyViewToModel(Reaction rea, ReactionView rav) {
-        rea.setId(rav.getId());
-        rea.setEmployee(EmployeeConverter.toModel(rav.getEmployee()));
-        rea.setReport(ReportConverter.toModel(rav.getReport()));
-        rea.setCreatedAt(rav.getCreatedAt());
-
+    public static void copyViewToModel(Reaction rea, ReactionView rev) {
+        rea.setId(rev.getId());
+        rea.setEmployee(EmployeeConverter.toModel(rev.getEmployee()));
+        rea.setReport(ReportConverter.toModel(rev.getReport()));
+        rea.setCreatedAt(rev.getCreatedAt());
     }
 
 }
